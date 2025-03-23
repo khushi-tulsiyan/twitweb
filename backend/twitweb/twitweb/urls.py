@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
 
-# Simple homepage response
+
 def home(request):
     return HttpResponse("Welcome to TwitWeb! The API is live.")
 
 urlpatterns = [
     path('', home),  
     path('admin/', admin.site.urls),
-    path('api/', include('trends.urls')),  # 👈 Your API routes
+    path('api/', include("trends.urls")),  
 ]
