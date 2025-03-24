@@ -84,8 +84,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'twitweb.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -121,10 +119,32 @@ CACHES = {
         'LOCATION': os.getenv('REDIS_URL', 'redis://redis:6379/1'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+            'SOCKET_CONNECT_TIMEOUT': 5,
+            'SOCKET_TIMEOUT': 5,
+            'RETRY_ON_TIMEOUT': True,
+            'MAX_CONNECTIONS': 1000,
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+        },
+        'KEY_PREFIX': 'twitweb'
     }
 }
 
+# Redis session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+TIME_ZONE = "UTC"
+
+# Cache time to live is 15 minutes
+CACHE_TTL = 60 * 15
+
+# Redis as celery broker
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://redis:6379/1')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://redis:6379/1')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 
 
 # Internationalization
@@ -132,7 +152,7 @@ CACHES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
