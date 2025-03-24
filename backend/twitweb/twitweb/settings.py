@@ -61,7 +61,16 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  
+    "http://127.0.0.1:3000",
+    "http://frontend:3000",
 ]
+
+# Allow credentials in requests
+CORS_ALLOW_CREDENTIALS = True
+
+# For development, you can also use CORS_ALLOW_ALL_ORIGINS instead
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'twitweb.urls'
 
@@ -123,7 +132,6 @@ CACHES = {
             'SOCKET_TIMEOUT': 5,
             'RETRY_ON_TIMEOUT': True,
             'MAX_CONNECTIONS': 1000,
-            'PARSER_CLASS': 'redis.connection.HiredisParser',
         },
         'KEY_PREFIX': 'twitweb'
     }
